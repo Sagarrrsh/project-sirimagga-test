@@ -1,0 +1,542 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Customer-facing saree catalog item without internal manufacturer or cost information.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "slug": { "type": "string", "minLength": 2, "maxLength": 160, "pattern": "^[a-z0-9-]+$" },
+        "productCode": { "type": "string", "minLength": 2, "maxLength": 40, "pattern": "^[A-Z0-9-]+$" },
+        "description": { "type": "string", "minLength": 5, "maxLength": 2500 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "sareeType": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "fabricInfo": { "type": "string", "minLength": 2, "maxLength": 300 },
+        "sareeLength": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "blousePieceInfo": { "type": "string", "maxLength": 200 },
+        "careInstructions": { "type": "string", "minLength": 2, "maxLength": 400 },
+        "sellingPrice": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "discountPercent": { "type": "number" },
+        "colorOptions": { "type": "array" },
+        "images": { "type": "array" },
+        "availabilityStatus": {
+          "type": "string",
+          "enum": ["Available", "Made to Order", "Out of Stock"]
+        },
+        "estimatedDispatchDays": { "type": "string", "maxLength": 80 },
+        "isBestseller": { "type": "boolean" },
+        "isNewArrival": { "type": "boolean" },
+        "popularityScore": { "type": "number" },
+        "isDemo": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "title",
+        "slug",
+        "productCode",
+        "description",
+        "category",
+        "sareeType",
+        "fabricInfo",
+        "sareeLength",
+        "careInstructions",
+        "sellingPrice",
+        "colorOptions",
+        "images",
+        "availabilityStatus",
+        "isBestseller",
+        "isNewArrival",
+        "popularityScore",
+        "isDemo",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Saree collection category shown on the storefront.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "slug": { "type": "string", "minLength": 2, "maxLength": 100, "pattern": "^[a-z0-9-]+$" },
+        "description": { "type": "string", "maxLength": 400 },
+        "image": { "type": "string", "maxLength": 500 },
+        "displayOrder": { "type": "number" },
+        "isActive": { "type": "boolean" }
+      },
+      "required": ["name", "slug", "description", "image", "displayOrder", "isActive"]
+    },
+    "Discount": {
+      "title": "Discount",
+      "description": "Promotional discount code configuration.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string", "minLength": 2, "maxLength": 32, "pattern": "^[A-Z0-9_-]+$" },
+        "description": { "type": "string", "maxLength": 200 },
+        "discountType": { "type": "string", "enum": ["percentage", "flat"] },
+        "value": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "discountType", "value", "minOrderAmount", "isActive", "createdAt"]
+    },
+    "StoreSetting": {
+      "title": "StoreSetting",
+      "description": "Public storefront shipping and delivery threshold settings.",
+      "type": "object",
+      "properties": {
+        "freeShippingThreshold": { "type": "number" },
+        "standardShippingFee": { "type": "number" },
+        "estimatedDeliveryWindow": { "type": "string", "maxLength": 100 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["freeShippingThreshold", "standardShippingFee", "estimatedDeliveryWindow", "updatedAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Moderated customer product review or demo testimonial displayed on the storefront only once approved.",
+      "type": "object",
+      "properties": {
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "city": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "sareePurchased": { "type": "string", "maxLength": 140 },
+        "productId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "productCode": { "type": "string", "maxLength": 40 },
+        "productTitle": { "type": "string", "maxLength": 140 },
+        "rating": { "type": "number" },
+        "comment": { "type": "string", "minLength": 5, "maxLength": 600 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "moderatorNote": { "type": "string", "maxLength": 300 },
+        "moderatedAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "isDemo": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["customerName", "city", "rating", "comment", "status", "isDemo", "createdAt"]
+    },
+    "NewsletterSubscriber": {
+      "title": "NewsletterSubscriber",
+      "description": "Email subscriber for SIRIMAGGA collection announcements.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated customer profile with PII isolated from public reads.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "phone": { "type": "string", "maxLength": 24 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "email", "createdAt", "updatedAt"]
+    },
+    "CustomerAddress": {
+      "title": "CustomerAddress",
+      "description": "Saved Indian delivery address for a customer.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "recipientName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "phone": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "addressLine": { "type": "string", "minLength": 5, "maxLength": 300 },
+        "city": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "state": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "pincode": { "type": "string", "minLength": 6, "maxLength": 10, "pattern": "^[0-9]{6}$" },
+        "isDefault": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "label", "recipientName", "phone", "addressLine", "city", "state", "pincode", "isDefault", "createdAt"]
+    },
+    "WishlistItem": {
+      "title": "WishlistItem",
+      "description": "Saved product reference in a customer's wishlist.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "productId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "addedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer-visible order document with zero internal sourcing or manufacturer details.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "minLength": 4, "maxLength": 40, "pattern": "^[A-Z0-9-]+$" },
+        "customerId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "customerName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "customerEmail": { "type": "string", "format": "email", "maxLength": 160 },
+        "customerPhone": { "type": "string", "minLength": 10, "maxLength": 20 },
+        "shippingAddress": { "type": "object" },
+        "items": { "type": "array" },
+        "subtotal": { "type": "number" },
+        "shippingCharge": { "type": "number" },
+        "discountCode": { "type": "string", "maxLength": 32 },
+        "discountAmount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Card", "NetBanking", "COD"] },
+        "paymentStatus": { "type": "string", "enum": ["Pending", "Test Mode - Authorised", "Paid", "Refunded"] },
+        "paymentReference": { "type": "string", "maxLength": 120 },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Order Placed",
+            "Confirmed",
+            "Quality Inspection",
+            "Packaging in Progress",
+            "Ready to Dispatch",
+            "Shipped",
+            "Delivered",
+            "Unavailable - Action Needed",
+            "Cancelled"
+          ]
+        },
+        "courierName": { "type": "string", "maxLength": 100 },
+        "trackingNumber": { "type": "string", "maxLength": 100 },
+        "customerNote": { "type": "string", "maxLength": 500 },
+        "loyaltyPointsEarned": { "type": "number" },
+        "loyaltyPointsRedeemed": { "type": "number" },
+        "loyaltyDiscountAmount": { "type": "number" },
+        "loyaltyVoucherCode": { "type": "string", "maxLength": 32 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderNumber",
+        "customerId",
+        "customerName",
+        "customerEmail",
+        "customerPhone",
+        "shippingAddress",
+        "items",
+        "subtotal",
+        "shippingCharge",
+        "discountAmount",
+        "totalAmount",
+        "paymentMethod",
+        "paymentStatus",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "OrderProcurement": {
+      "title": "OrderProcurement",
+      "description": "Admin-only internal manufacturer sourcing, procurement status, and profit margin ledger.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "orderNumber": { "type": "string", "minLength": 4, "maxLength": 40 },
+        "internalStage": {
+          "type": "string",
+          "enum": [
+            "Pending Availability Check",
+            "Availability Confirmed",
+            "Procurement Ordered",
+            "Received from Manufacturer",
+            "Inspection Passed",
+            "Packaging",
+            "Dispatched",
+            "Manufacturer Unavailable"
+          ]
+        },
+        "manufacturerId": { "type": "string", "maxLength": 128 },
+        "manufacturerName": { "type": "string", "maxLength": 140 },
+        "manufacturerPhone": { "type": "string", "maxLength": 30 },
+        "productCodes": { "type": "array" },
+        "sellingTotal": { "type": "number" },
+        "manufacturerPurchaseCost": { "type": "number" },
+        "packagingCost": { "type": "number" },
+        "shippingCost": { "type": "number" },
+        "paymentGatewayFee": { "type": "number" },
+        "otherVariableCost": { "type": "number" },
+        "grossMargin": { "type": "number" },
+        "netContribution": { "type": "number" },
+        "procurementNotes": { "type": "string", "maxLength": 1000 },
+        "alternativeOffered": { "type": "string", "maxLength": 400 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderId",
+        "orderNumber",
+        "internalStage",
+        "sellingTotal",
+        "manufacturerPurchaseCost",
+        "packagingCost",
+        "shippingCost",
+        "paymentGatewayFee",
+        "otherVariableCost",
+        "grossMargin",
+        "netContribution",
+        "updatedAt"
+      ]
+    },
+    "Manufacturer": {
+      "title": "Manufacturer",
+      "description": "Admin-only directory of partner saree manufacturers in Rabkavi, Banahatti, Ilkal, and nearby areas.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "location": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "contactPerson": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "minLength": 8, "maxLength": 24 },
+        "assignedProductCodes": { "type": "array" },
+        "purchasePricesByCode": { "type": "object" },
+        "availabilityNotes": { "type": "string", "maxLength": 800 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "name",
+        "location",
+        "phone",
+        "assignedProductCodes",
+        "isActive",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminCostSetting": {
+      "title": "AdminCostSetting",
+      "description": "Admin-only default unit costing variables for profit contribution calculation.",
+      "type": "object",
+      "properties": {
+        "defaultPackagingCost": { "type": "number" },
+        "defaultShippingCost": { "type": "number" },
+        "gatewayFeePercent": { "type": "number" },
+        "defaultOtherVariableCost": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "defaultPackagingCost",
+        "defaultShippingCost",
+        "gatewayFeePercent",
+        "defaultOtherVariableCost",
+        "updatedAt"
+      ]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Trusted administrator access marker document.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "grantedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "grantedAt"]
+    },
+    "OrderTracking": {
+      "title": "OrderTracking",
+      "description": "Zero-PII public order tracking projection keyed by SHA-256 hash of orderNumber and customer email.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "minLength": 4, "maxLength": 40, "pattern": "^[A-Z0-9-]+$" },
+        "customerId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Order Placed",
+            "Confirmed",
+            "Quality Inspection",
+            "Packaging in Progress",
+            "Ready to Dispatch",
+            "Shipped",
+            "Delivered",
+            "Unavailable - Action Needed",
+            "Cancelled"
+          ]
+        },
+        "paymentMethod": { "type": "string", "enum": ["UPI", "Card", "NetBanking", "COD"] },
+        "paymentStatus": { "type": "string", "enum": ["Pending", "Test Mode - Authorised", "Paid", "Refunded"] },
+        "courierName": { "type": "string", "maxLength": 100 },
+        "trackingNumber": { "type": "string", "maxLength": 100 },
+        "itemCount": { "type": "number" },
+        "itemTitles": { "type": "array" },
+        "destinationCityState": { "type": "string", "maxLength": 160 },
+        "totalAmount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderNumber",
+        "customerId",
+        "status",
+        "paymentMethod",
+        "paymentStatus",
+        "itemCount",
+        "itemTitles",
+        "destinationCityState",
+        "totalAmount",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EmailNotification": {
+      "title": "EmailNotification",
+      "description": "Audit log and preview of automated order status notification emails triggered for customers.",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "orderNumber": { "type": "string", "minLength": 4, "maxLength": 40, "pattern": "^[A-Z0-9-]+$" },
+        "customerId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "recipientEmail": { "type": "string", "format": "email", "maxLength": 160 },
+        "eventStatus": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "subject": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "previewText": { "type": "string", "minLength": 2, "maxLength": 1200 },
+        "deliveryState": { "type": "string", "enum": ["sent_smtp", "queued_cloud_function", "failed"] },
+        "providerMessage": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderId",
+        "orderNumber",
+        "customerId",
+        "recipientEmail",
+        "eventStatus",
+        "subject",
+        "previewText",
+        "deliveryState",
+        "createdAt"
+      ]
+    },
+    "LoyaltySummary": {
+      "title": "LoyaltySummary",
+      "description": "Customer loyalty points balance and lifetime progress summary.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "pointsBalance": { "type": "number" },
+        "lifetimeEarned": { "type": "number" },
+        "totalRedeemed": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "pointsBalance", "lifetimeEarned", "totalRedeemed", "updatedAt"]
+    },
+    "LoyaltyTransaction": {
+      "title": "LoyaltyTransaction",
+      "description": "Ledger entry recording points earned on orders or redeemed for discounts.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "type": { "type": "string", "enum": ["earn", "redeem", "voucher_issued"] },
+        "points": { "type": "number" },
+        "rupeeValue": { "type": "number" },
+        "orderId": { "type": "string", "maxLength": 128 },
+        "orderNumber": { "type": "string", "maxLength": 40 },
+        "voucherCode": { "type": "string", "maxLength": 32 },
+        "description": { "type": "string", "minLength": 2, "maxLength": 240 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "points", "rupeeValue", "description", "createdAt"]
+    },
+    "LoyaltyVoucher": {
+      "title": "LoyaltyVoucher",
+      "description": "Discount voucher redeemed from customer loyalty points.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_-]+$" },
+        "code": { "type": "string", "minLength": 4, "maxLength": 32, "pattern": "^[A-Z0-9-]+$" },
+        "pointsUsed": { "type": "number" },
+        "discountValue": { "type": "number" },
+        "minOrderAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "used"] },
+        "usedOrderId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "usedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "code", "pointsUsed", "discountValue", "minOrderAmount", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Public saree product catalog."
+    },
+    "/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Saree collections and categories."
+    },
+    "/discounts/{discountId}": {
+      "schema": { "$ref": "#/entities/Discount" },
+      "description": "Promotional discount codes."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/StoreSetting" },
+      "description": "Public storefront shipping configuration."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Customer reviews and demo testimonials."
+    },
+    "/newsletter/{subscriberId}": {
+      "schema": { "$ref": "#/entities/NewsletterSubscriber" },
+      "description": "Newsletter email subscribers."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated customer profile."
+    },
+    "/users/{userId}/addresses/{addressId}": {
+      "schema": { "$ref": "#/entities/CustomerAddress" },
+      "description": "Customer saved delivery addresses."
+    },
+    "/users/{userId}/wishlist/{productId}": {
+      "schema": { "$ref": "#/entities/WishlistItem" },
+      "description": "Customer wishlist items."
+    },
+    "/users/{userId}/loyalty_summary/{docId}": {
+      "schema": { "$ref": "#/entities/LoyaltySummary" },
+      "description": "Customer loyalty points balance summary."
+    },
+    "/users/{userId}/loyalty_transactions/{txId}": {
+      "schema": { "$ref": "#/entities/LoyaltyTransaction" },
+      "description": "Customer loyalty points earn and redeem history."
+    },
+    "/users/{userId}/loyalty_vouchers/{voucherId}": {
+      "schema": { "$ref": "#/entities/LoyaltyVoucher" },
+      "description": "Customer redeemed loyalty discount vouchers."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer-facing orders without internal sourcing details."
+    },
+    "/order_tracking/{trackingId}": {
+      "schema": { "$ref": "#/entities/OrderTracking" },
+      "description": "Zero-PII public order tracking status projection keyed by SHA-256(orderNumber::email)."
+    },
+    "/email_notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/EmailNotification" },
+      "description": "Order status email notification audit logs and previews."
+    },
+    "/order_procurement/{orderId}": {
+      "schema": { "$ref": "#/entities/OrderProcurement" },
+      "description": "Admin-only internal procurement tracking and per-order profit ledger."
+    },
+    "/manufacturers/{manufacturerId}": {
+      "schema": { "$ref": "#/entities/Manufacturer" },
+      "description": "Admin-only directory of regional textile manufacturers."
+    },
+    "/admin_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/AdminCostSetting" },
+      "description": "Admin-only costing defaults."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Admin role registry."
+    }
+  }
+}

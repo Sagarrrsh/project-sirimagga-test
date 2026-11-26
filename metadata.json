@@ -1,0 +1,8 @@
+{
+  "name": "SIRIMAGGA",
+  "description": "SIRIMAGGA – Premium Karnataka Saree Store from Bagalkot District. Discover traditional Ilkal, Banahatti cotton, and festive silk sarees crafted with regional weaving heritage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
